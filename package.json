@@ -1,0 +1,29 @@
+{
+	"name": "numcaptcha-js",
+	"version": "1.0.0",
+	"description": "Javascript plug-and-play client-side library to use numCAPTCHA",
+	"main": "index.js",
+	"scripts": {
+		"types": "tsc",
+		"build": "npx rollup --config",
+		"watch": "npx rollup --config --watch"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Kabbage-Babbage/libraryJS.git"
+	},
+	"author": "Kabbage",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Kabbage-Babbage/libraryJS/issues"
+	},
+	"homepage": "https://github.com/Kabbage-Babbage/libraryJS#readme",
+	"devDependencies": {
+		"@rollup/plugin-typescript": "^8.1.0",
+		"rollup": "^2.35.1",
+		"tslib": "^2.0.3"
+	},
+	"dependencies": {
+		"typescript": "^4.1.3"
+	}
+}
