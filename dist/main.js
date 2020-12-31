@@ -1,146 +1,44 @@
 'use strict';
 
-const cssStyles = [
-    `
-  #captcha-wrapper {
-		height: 75px;
-		width: 350px;
-		border: 3px solid #000000;
-		box-shadow: 4px 4px 2px rgba(220, 220, 220, 0.7);
-		border-radius: 10px;
-		padding: 10px;
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-  }
-`,
-    `
-	.captcha-image {
-		position: relative;
-		height: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-`,
-    `
-	.captcha-image > img {
-    height: 53px;
-    width: 135px;
-	}
-`,
-    `
-	.captcha-content {
-		height: 100%;
-		width: 100%;
-	}
-`,
-    `
-	.captcha-body {
-		height: 50%;
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-end;
-	}
-`,
-    `
-	.captcha-logo {
-		height: 100%;
-		max-width: 80%;
-	}
-`,
-    `
-	.captcha-header {
-		height: 50%;
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-		margin-bottom: 3px;
-	}
-`,
-    `
-	.captcha-reload {
-		position: absolute;
-		top: 3px;
-		left: 3px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-`,
-    `
-	.fa.fa-redo {
-		color: blue;
-	}
-`,
-    `
-	.captcha-input {
-		border-radius: 10px;
-		padding-left: 10px;
-		margin-right: 10px;
-		border: 1px solid grey;
-		height: 75%;
-		width: 80%;
-		float: left;
-	}
-`,
-    `
-	.captcha-status {
-		float: right;
-		height: 75%;
-		width: 15%;
-	}
-`,
-    `
-	.fa.fa-circle-o-notch {
-		color: blue;
-		font-size: 1.5em;
-	}
-`,
-    `
-	.fa.fa-check {
-		color: green;
-		font-size: 1.5em;
-	}
-`,
-    `
-	.fa.fa-times {
-		color: red;
-		font-size: 1.5em;
-  }
-`,
-    `  
-  .hidden {
-    display: none;
-  }
-`,
-    `
-  .blur {   
-		filter: blur(3px);
-  }  
-`,
+var cssStyles = [
+    "\n  #captcha-wrapper {\n\t\theight: 75px;\n\t\twidth: 350px;\n\t\tborder: 3px solid #000000;\n\t\tbox-shadow: 4px 4px 2px rgba(220, 220, 220, 0.7);\n\t\tborder-radius: 10px;\n\t\tpadding: 10px;\n\t\tdisplay: flex;\n\t\talign-items: center;\n\t\tjustify-content: flex-start;\n  }\n",
+    "\n\t.captcha-image {\n\t\tposition: relative;\n\t\theight: 100%;\n\t\tdisplay: flex;\n\t\tjustify-content: center;\n\t\talign-items: center;\n\t}\n",
+    "\n\t.captcha-image > img {\n    height: 53px;\n    width: 135px;\n\t}\n",
+    "\n\t.captcha-content {\n\t\theight: 100%;\n\t\twidth: 100%;\n\t}\n",
+    "\n\t.captcha-body {\n\t\theight: 50%;\n\t\tdisplay: flex;\n\t\tjustify-content: space-between;\n\t\talign-items: flex-end;\n\t}\n",
+    "\n\t.captcha-logo {\n\t\theight: 100%;\n\t\tmax-width: 80%;\n\t}\n",
+    "\n\t.captcha-header {\n\t\theight: 50%;\n\t\tdisplay: flex;\n\t\tjustify-content: flex-start;\n\t\talign-items: center;\n\t\tmargin-bottom: 3px;\n\t}\n",
+    "\n\t.captcha-reload {\n\t\tposition: absolute;\n\t\ttop: 3px;\n\t\tleft: 3px;\n\t\tdisplay: flex;\n\t\tjustify-content: center;\n\t\talign-items: center;\n\t}\n",
+    "\n\t.fa.fa-redo {\n\t\tcolor: blue;\n\t}\n",
+    "\n\t.captcha-input {\n\t\tborder-radius: 10px;\n\t\tpadding-left: 10px;\n\t\tmargin-right: 10px;\n\t\tborder: 1px solid grey;\n\t\theight: 75%;\n\t\twidth: 80%;\n\t\tfloat: left;\n\t}\n",
+    "\n\t.captcha-status {\n\t\tfloat: right;\n\t\theight: 75%;\n\t\twidth: 15%;\n\t}\n",
+    "\n\t.fa.fa-circle-o-notch {\n\t\tcolor: blue;\n\t\tfont-size: 1.5em;\n\t}\n",
+    "\n\t.fa.fa-check {\n\t\tcolor: green;\n\t\tfont-size: 1.5em;\n\t}\n",
+    "\n\t.fa.fa-times {\n\t\tcolor: red;\n\t\tfont-size: 1.5em;\n  }\n",
+    "  \n  .hidden {\n    display: none;\n  }\n",
+    "\n  .blur {   \n\t\tfilter: blur(3px);\n  }  \n",
 ];
 
-const linkDependencies = [
+var linkDependencies = [
     {
         rel: "stylesheet",
         href: "https://use.fontawesome.com/releases/v5.3.1/css/all.css",
         integrity: "sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU",
-        crossorigin: "anonymous",
+        crossorigin: "anonymous"
     },
     {
         rel: "stylesheet",
         href: "https://stackpath.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css",
         integrity: "sha384-X7L1bhgb36bF1iFvaqvhgpaGpayKM+vXNNYRlF89BFA5s3vi1qZ8EX9086RlZjy1",
-        crossorigin: "anonymous",
+        crossorigin: "anonymous"
     },
 ];
-const inputType = "text";
-const placeHolder = "Type the answer.";
+var inputType = "text";
+var placeHolder = "Type the answer.";
 
-const designatedId = "captcha-wrapper";
+var designatedId = "captcha-wrapper";
 function addChild(parent, elementType, classList) {
-    const created = document.createElement(elementType);
+    var created = document.createElement(elementType);
     parent.appendChild(created);
     if (classList) {
         addClass(created, classList);
@@ -148,13 +46,13 @@ function addChild(parent, elementType, classList) {
     return created;
 }
 function addClass(element, classList) {
-    classList.forEach((currentClass) => {
+    classList.forEach(function (currentClass) {
         element.classList.add(currentClass);
     });
 }
 function useDependencies() {
-    linkDependencies.forEach((dependency) => {
-        const link = document.createElement("link");
+    linkDependencies.forEach(function (dependency) {
+        var link = document.createElement("link");
         link.rel = dependency.rel;
         link.href = dependency.href;
         link.integrity = dependency.integrity;
@@ -163,44 +61,42 @@ function useDependencies() {
     });
 }
 function useDefaultStyleSheet() {
-    const style = document.createElement("style");
+    var style = document.createElement("style");
     document.head.appendChild(style);
-    cssStyles.forEach((cssStyle) => {
+    cssStyles.forEach(function (cssStyle) {
         style.sheet.insertRule(cssStyle);
     });
 }
 function useDefaultStructure(wrapper) {
-    //hard coded for easier job
-    const imageWrapper = addChild(wrapper, "div", ["captcha-image"]);
-    const image = addChild(imageWrapper, "img");
-    // TODO: replace with non-hardcoded value.
+    var imageWrapper = addChild(wrapper, "div", ["captcha-image"]);
+    var image = addChild(imageWrapper, "img");
     image.src =
         "https://cdn.discordapp.com/attachments/790469331402096660/790469909834235924/unknown.png";
-    const reload = (addChild(imageWrapper, "div", ["captcha-reload"]));
+    var reload = (addChild(imageWrapper, "div", ["captcha-reload"]));
     addChild(reload, "i", ["fa", "fa-redo", "hidden"]);
-    const contentWrapper = addChild(wrapper, "div", ["captcha-content"]);
-    const contentHeader = addChild(contentWrapper, "div", ["captcha-header"]);
-    const contentBody = addChild(contentWrapper, "div", ["captcha-body"]);
-    const contentLogo = (addChild(contentHeader, "img", ["captcha-logo"]));
+    var contentWrapper = addChild(wrapper, "div", ["captcha-content"]);
+    var contentHeader = addChild(contentWrapper, "div", ["captcha-header"]);
+    var contentBody = addChild(contentWrapper, "div", ["captcha-body"]);
+    var contentLogo = (addChild(contentHeader, "img", ["captcha-logo"]));
     contentLogo.src = "./static/logo.png";
-    const input = (addChild(contentBody, "input", ["captcha-input"]));
+    var input = (addChild(contentBody, "input", ["captcha-input"]));
     input.placeholder = placeHolder;
     input.type = inputType;
-    const statusWrapper = addChild(contentBody, "div", ["captcha-status"]);
-    const status = addChild(statusWrapper, "i", [
+    var statusWrapper = addChild(contentBody, "div", ["captcha-status"]);
+    var status = addChild(statusWrapper, "i", [
         "fa",
         "fa-circle-o-notch",
         "fa-spin",
     ]);
     return {
-        image,
-        reload,
-        input,
-        status,
+        image: image,
+        reload: reload,
+        input: input,
+        status: status
     };
 }
 function render() {
-    const wrapper = document.getElementById(designatedId);
+    var wrapper = document.getElementById(designatedId);
     if (!wrapper) {
         throw new Error("Please create a <div> tag with the id of 'captcha-wrapper'");
     }
