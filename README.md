@@ -30,10 +30,10 @@ In your index.html, numCaptcha dynamically renders in a `<div>` tag with the id 
 
 <br />
 
-You also need to import the script using a script tag
+You also need to import the minified script using a script tag
 
 ```html
-<script src="https://numcaptcha.s3.amazonaws.com/lib/numCaptchaJS/main.js"></script>
+<script src="https://numcaptcha.s3.amazonaws.com/lib/numCaptchaJS/numCaptcha.min.js"></script>
 ```
 
 > :warning: Remember to import numCaptchaJS <u>after</u> the \<body\> tag

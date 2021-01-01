@@ -6,7 +6,8 @@
 	"scripts": {
 		"types": "tsc",
 		"build": "npx rollup --config",
-		"watch": "npx rollup --config --watch"
+		"watch": "npx rollup --config --watch",
+		"minify": "minify ./dist/main.js --out-file ./min/numcaptcha.min.js --mangle.keepClassName"
 	},
 	"repository": {
 		"type": "git",
@@ -20,6 +21,7 @@
 	"homepage": "https://github.com/Kabbage-Babbage/libraryJS#readme",
 	"devDependencies": {
 		"@rollup/plugin-typescript": "^8.1.0",
+		"babel-minify": "^0.5.1",
 		"rollup": "^2.35.1",
 		"tslib": "^2.0.3"
 	},
