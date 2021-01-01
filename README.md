@@ -2,7 +2,9 @@
 
 ---
 
-![logo](./static/logo.png)
+<div align="center">
+  <img src="./static/logo.png">
+</div>
 
 numCaptchaJS is a _Javascript_ Library that allows you to use <u>numCAPTCHA</u> easily on your website. It dynamically renders the following captcha box on your page.
 
