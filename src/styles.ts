@@ -75,17 +75,16 @@ export const cssStyles: string[] = [
 	.captcha-input {
 		border-radius: 10px;
 		padding-left: 10px;
-		margin-right: 10px;
 		border: 1px solid grey;
 		height: 75%;
-		width: 80%;
+		width: 89%;
 		float: left;
 	}
 `,
 	`
 	.captcha-status {
 		float: right;
-		height: 75%;
+		height: 80%;
 		width: 15%;
 	}
 `,
@@ -109,12 +108,20 @@ export const cssStyles: string[] = [
 `,
 	`  
   .hidden {
-    display: none;
+    display: none !important;
   }
 `,
 	`
   .blur {   
 		filter: blur(3px);
   }  
+`,
+	`
+	.captcha-form {
+		height: 100%;
+		width: 100%;
+		display: flex;
+		align-items: center;
+	}
 `,
 ];

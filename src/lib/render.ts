@@ -1,42 +1,19 @@
 import { cssStyles } from "../styles";
+import { UseableElements, CaptchaInstance, Status } from "../types/renderTypes";
 import {
-	CreatableElements,
-	CreatableClasses,
-	UseableElements,
-} from "../types/renderTypes";
-import { linkDependencies, inputType, placeHolder } from "../utils/renderUtils";
+	linkDependencies,
+	inputType,
+	placeHolder,
+	addChild,
+	addClass,
+	removeClass,
+	removeAllClass,
+} from "../utils/renderUtils";
+import { getCaptcha } from "./fetch";
 
 const designatedId: string = "captcha-wrapper";
 
-function addChild(
-	parent: HTMLElement,
-	elementType: CreatableElements,
-	classList?: CreatableClasses[]
-): HTMLElement {
-	const created: HTMLElement = document.createElement(elementType);
-	parent.appendChild(created);
-	if (classList) {
-		addClass(created, classList);
-	}
-	return created;
-}
-
-function addClass(element: HTMLElement, classList: CreatableClasses[]): void {
-	classList.forEach((currentClass) => {
-		element.classList.add(currentClass);
-	});
-}
-
-function removeClass(
-	element: HTMLElement,
-	classList: CreatableClasses[]
-): void {
-	classList.forEach((currentClass) => {
-		element.classList.remove(currentClass);
-	});
-}
-
-function useDependencies(): void {
+function useStyleDependencies(): void {
 	linkDependencies.forEach((dependency) => {
 		const link = document.createElement("link");
 		link.rel = dependency.rel;
@@ -59,14 +36,12 @@ function useDefaultStructure(wrapper: HTMLElement): UseableElements {
 	//hard coded for easier job
 	const imageWrapper = addChild(wrapper, "div", ["captcha-image"]);
 	const image = <HTMLImageElement>addChild(imageWrapper, "img");
-	// TODO: replace with non-hardcoded value.
-	image.src =
-		"https://cdn.discordapp.com/attachments/790469331402096660/790469909834235924/unknown.png";
+	image.alt = "Something went wrong :(";
 
 	const reload = <HTMLDivElement>(
-		addChild(imageWrapper, "div", ["captcha-reload"])
+		addChild(imageWrapper, "div", ["captcha-reload", "hidden"])
 	);
-	addChild(reload, "i", ["fa", "fa-redo", "hidden"]);
+	addChild(reload, "i", ["fa", "fa-redo"]);
 
 	const contentWrapper = addChild(wrapper, "div", ["captcha-content"]);
 	const contentHeader = addChild(contentWrapper, "div", ["captcha-header"]);
@@ -77,38 +52,101 @@ function useDefaultStructure(wrapper: HTMLElement): UseableElements {
 	);
 	contentLogo.src = "./static/logo.png";
 
-	const input = <HTMLInputElement>(
-		addChild(contentBody, "input", ["captcha-input"])
-	);
+	const form = <HTMLFormElement>addChild(contentBody, "form", ["captcha-form"]);
+	const input = <HTMLInputElement>addChild(form, "input", ["captcha-input"]);
 	input.placeholder = placeHolder;
 	input.type = inputType;
 
 	const statusWrapper = addChild(contentBody, "div", ["captcha-status"]);
-	const status = addChild(statusWrapper, "i", [
-		"fa",
-		"fa-circle-o-notch",
-		"fa-spin",
-	]);
+	const status = addChild(statusWrapper, "i", ["fa"]);
 
 	return {
 		image,
 		reload,
 		input,
+		form,
 		status,
 	};
 }
 
-export function render(): void {
+function useInitialRender(): CaptchaInstance {
 	const wrapper: HTMLElement | null = document.getElementById(designatedId);
 
 	if (!wrapper) {
 		throw new Error(
 			"Please create a <div> tag with the id of 'captcha-wrapper'"
 		);
-		return;
 	}
 
-	useDependencies();
+	if (wrapper.children.length > 0) {
+		throw new Error("Please remove contents within <div> tag");
+	}
+
+	useStyleDependencies();
 	useDefaultStyleSheet();
-	useDefaultStructure(wrapper);
+
+	return useDefaultStructure(wrapper);
 }
+
+function hide(element: HTMLElement | Element): void {
+	addClass(element, ["hidden"]);
+}
+
+function show(element: HTMLElement | Element): void {
+	if (element.classList.contains("hidden")) {
+		removeClass(element, ["hidden"]);
+	}
+}
+
+function blur(element: HTMLImageElement): void {
+	addClass(element, ["blur"]);
+}
+
+function unblur(element: HTMLImageElement): void {
+	if (element.classList.contains("blur")) {
+		removeClass(element, ["blur"]);
+	}
+}
+
+function disable(element: HTMLInputElement): void {
+	element.setAttribute("disabled", "");
+}
+
+function enable(element: HTMLInputElement): void {
+	element.removeAttribute("disabled");
+}
+
+function clearInput(element: HTMLInputElement): void {
+	element.value = "";
+}
+
+function updateImage(element: HTMLImageElement, image: string): void {
+	element.src = image;
+}
+
+function updateStatus(element: HTMLElement, status: Status): void {
+	removeAllClass(element);
+	switch (status) {
+		case "success":
+			addClass(element, ["fa", "fa-check"]);
+			break;
+		case "failed":
+			addClass(element, ["fa", "fa-times"]);
+			break;
+		default:
+			addClass(element, ["fa", "fa-circle-o-notch", "fa-spin"]);
+	}
+}
+
+export {
+	useInitialRender,
+	hide,
+	show,
+	blur,
+	unblur,
+	disable,
+	enable,
+	clearInput,
+	updateImage,
+	updateStatus,
+};

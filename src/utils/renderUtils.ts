@@ -1,4 +1,8 @@
-import { LinkDependencies } from "../types/renderTypes";
+import {
+	LinkDependencies,
+	CreatableClasses,
+	CreatableElements,
+} from "../types/renderTypes";
 
 export const linkDependencies: LinkDependencies[] = [
 	{
@@ -20,3 +24,35 @@ export const linkDependencies: LinkDependencies[] = [
 
 export const inputType: string = "text";
 export const placeHolder: string = "Type the answer.";
+
+export function addChild(
+	parent: HTMLElement,
+	elementType: CreatableElements,
+	classList?: CreatableClasses[]
+): HTMLElement {
+	const created: HTMLElement = document.createElement(elementType);
+	parent.appendChild(created);
+	if (classList) {
+		addClass(created, classList);
+	}
+	return created;
+}
+
+export function addClass(
+	element: HTMLElement | Element,
+	classList: CreatableClasses[]
+): void {
+	element.classList.add(...classList);
+}
+
+export function removeClass(
+	element: HTMLElement | Element,
+	classList: CreatableClasses[]
+): void {
+	element.classList.remove(...classList);
+}
+
+export function removeAllClass(element: HTMLElement): void {
+	const currentClasses = element.classList;
+	element.classList.remove(...currentClasses);
+}

@@ -1,1 +1,12 @@
-export declare function render(): void;
+import { CaptchaInstance, Status } from "../types/renderTypes";
+declare function useInitialRender(): CaptchaInstance;
+declare function hide(element: HTMLElement | Element): void;
+declare function show(element: HTMLElement | Element): void;
+declare function blur(element: HTMLImageElement): void;
+declare function unblur(element: HTMLImageElement): void;
+declare function disable(element: HTMLInputElement): void;
+declare function enable(element: HTMLInputElement): void;
+declare function clearInput(element: HTMLInputElement): void;
+declare function updateImage(element: HTMLImageElement, image: string): void;
+declare function updateStatus(element: HTMLElement, status: Status): void;
+export { useInitialRender, hide, show, blur, unblur, disable, enable, clearInput, updateImage, updateStatus, };

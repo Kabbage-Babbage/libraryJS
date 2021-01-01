@@ -8,10 +8,16 @@ export interface UseableElements {
 	image: HTMLImageElement;
 	reload: HTMLDivElement;
 	input: HTMLInputElement;
+	form: HTMLFormElement;
 	status: HTMLElement;
 }
 
-export type CreatableElements = "div" | "i" | "img" | "input";
+export interface CaptchaInstance extends UseableElements {
+	id?: string;
+	displayTimeoutInstance?: number;
+}
+
+export type CreatableElements = "div" | "i" | "img" | "input" | "form";
 export type CreatableClasses =
 	| "captcha-image"
 	| "captcha-reload"
@@ -27,5 +33,8 @@ export type CreatableClasses =
 	| "captcha-body"
 	| "captcha-input"
 	| "captcha-status"
+	| "captcha-form"
 	| "hidden"
 	| "blur";
+
+export type Status = "success" | "failed" | "pending";
