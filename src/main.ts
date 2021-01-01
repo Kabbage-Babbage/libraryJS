@@ -14,19 +14,11 @@ import { getCaptcha } from "./lib/fetch";
 import { CaptchaInstance } from "./types/renderTypes";
 import { submitCaptcha } from "./lib/fetch";
 
-// declare global {
-// 	interface Window {
-// 		render: () => Promise<number>;
-// 		// FIXME: replace type any with proper type
-// 	}
-// }
-
-// window.render = render;
+const forcedReloadTime: number = 15000;
 
 async function reloadCaptcha(
 	captcha: CaptchaInstance
 ): Promise<CaptchaInstance> {
-	console.log("reloading...");
 	blur(captcha.image);
 
 	const { image, id } = await getCaptcha();
@@ -47,43 +39,52 @@ async function reloadCaptcha(
 	return captcha;
 }
 
-async function useNumCaptcha(): Promise<void> {
-	let instance = useInitialRender();
+function useNumCaptcha(): Promise<boolean> {
+	return new Promise(async (resolve, reject) => {
+		let instance = useInitialRender();
 
-	instance = await reloadCaptcha(instance);
-
-	const reloadInstance = setInterval(async () => {
 		instance = await reloadCaptcha(instance);
-	}, 10000);
 
-	// add required event listeners
-	instance.form.addEventListener("submit", (e) => {
-		const check = instance.input.value;
-		if (instance.id && !!check) {
-			disable(instance.input);
+		const reloadInstance = setInterval(async () => {
+			instance = await reloadCaptcha(instance);
+		}, forcedReloadTime);
 
-			// prevent setTimeout from firing.
-			clearTimeout(instance.displayTimeoutInstance);
+		// add required event listeners
+		instance.form.addEventListener("submit", (e) => {
+			const check = instance.input.value;
+			if (instance.id && !!check) {
+				disable(instance.input);
 
-			submitCaptcha(instance.id, check).then(
-				(response) => {
-					console.log(response);
-					clearInterval(reloadInstance);
-					updateStatus(instance.status, "success");
-					hide(instance.reload.children[0]);
-				},
-				(error) => {
-					updateStatus(instance.status, "failed");
-					show(instance.reload);
-				}
-			);
-		}
-		e.preventDefault();
-	});
+				// prevent setTimeout from firing.
+				clearTimeout(instance.displayTimeoutInstance);
 
-	instance.reload.addEventListener("click", async () => {
-		instance = await reloadCaptcha(instance);
+				submitCaptcha(instance.id, check).then(
+					(response) => {
+						clearInterval(reloadInstance);
+						updateStatus(instance.status, "success");
+						hide(instance.reload.children[0]);
+						resolve(true);
+					},
+					(error) => {
+						updateStatus(instance.status, "failed");
+						show(instance.reload);
+					}
+				);
+			}
+			e.preventDefault();
+		});
+
+		instance.reload.addEventListener("click", async () => {
+			instance = await reloadCaptcha(instance);
+		});
 	});
 }
 
-useNumCaptcha();
+// export to global window object
+declare global {
+	interface Window {
+		useNumCaptcha: () => Promise<boolean>;
+	}
+}
+
+window.useNumCaptcha = useNumCaptcha;

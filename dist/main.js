@@ -191,7 +191,7 @@ function useDefaultStructure(wrapper) {
     const contentHeader = addChild(contentWrapper, "div", ["captcha-header"]);
     const contentBody = addChild(contentWrapper, "div", ["captcha-body"]);
     const contentLogo = (addChild(contentHeader, "img", ["captcha-logo"]));
-    contentLogo.src = "./static/logo.png";
+    contentLogo.src = "https://numcaptcha.s3.amazonaws.com/static/logo.png";
     const form = addChild(contentBody, "form", ["captcha-form"]);
     const input = addChild(form, "input", ["captcha-input"]);
     input.placeholder = placeHolder;
@@ -286,8 +286,8 @@ async function submitCaptcha(id, check) {
     return await response.json();
 }
 
+const forcedReloadTime = 15000;
 async function reloadCaptcha(captcha) {
-    console.log("reloading...");
     blur(captcha.image);
     const { image, id } = await getCaptcha();
     captcha.id = id;
@@ -302,31 +302,33 @@ async function reloadCaptcha(captcha) {
     }, 5000);
     return captcha;
 }
-async function useNumCaptcha() {
-    let instance = useInitialRender();
-    instance = await reloadCaptcha(instance);
-    const reloadInstance = setInterval(async () => {
+function useNumCaptcha() {
+    return new Promise(async (resolve, reject) => {
+        let instance = useInitialRender();
         instance = await reloadCaptcha(instance);
-    }, 10000);
-    instance.form.addEventListener("submit", (e) => {
-        const check = instance.input.value;
-        if (instance.id && !!check) {
-            disable(instance.input);
-            clearTimeout(instance.displayTimeoutInstance);
-            submitCaptcha(instance.id, check).then((response) => {
-                console.log(response);
-                clearInterval(reloadInstance);
-                updateStatus(instance.status, "success");
-                hide(instance.reload.children[0]);
-            }, (error) => {
-                updateStatus(instance.status, "failed");
-                show(instance.reload);
-            });
-        }
-        e.preventDefault();
-    });
-    instance.reload.addEventListener("click", async () => {
-        instance = await reloadCaptcha(instance);
+        const reloadInstance = setInterval(async () => {
+            instance = await reloadCaptcha(instance);
+        }, forcedReloadTime);
+        instance.form.addEventListener("submit", (e) => {
+            const check = instance.input.value;
+            if (instance.id && !!check) {
+                disable(instance.input);
+                clearTimeout(instance.displayTimeoutInstance);
+                submitCaptcha(instance.id, check).then((response) => {
+                    clearInterval(reloadInstance);
+                    updateStatus(instance.status, "success");
+                    hide(instance.reload.children[0]);
+                    resolve(true);
+                }, (error) => {
+                    updateStatus(instance.status, "failed");
+                    show(instance.reload);
+                });
+            }
+            e.preventDefault();
+        });
+        instance.reload.addEventListener("click", async () => {
+            instance = await reloadCaptcha(instance);
+        });
     });
 }
-useNumCaptcha();
+window.useNumCaptcha = useNumCaptcha;

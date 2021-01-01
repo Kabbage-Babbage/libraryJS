@@ -50,7 +50,7 @@ function useDefaultStructure(wrapper: HTMLElement): UseableElements {
 	const contentLogo = <HTMLImageElement>(
 		addChild(contentHeader, "img", ["captcha-logo"])
 	);
-	contentLogo.src = "./static/logo.png";
+	contentLogo.src = "https://numcaptcha.s3.amazonaws.com/static/logo.png";
 
 	const form = <HTMLFormElement>addChild(contentBody, "form", ["captcha-form"]);
 	const input = <HTMLInputElement>addChild(form, "input", ["captcha-input"]);
