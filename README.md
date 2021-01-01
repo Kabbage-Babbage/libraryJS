@@ -8,7 +8,7 @@
 
 <br />
 
-numCaptchaJS is a _Javascript_ Library that allows you to use <u>numCAPTCHA</u> easily on your website.
+<div align="center">numCaptchaJS is a _Javascript_ Library that allows you to use <u>numCAPTCHA</u> easily on your website.</div>
 
 <br />
 
