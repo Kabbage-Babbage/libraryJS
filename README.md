@@ -47,3 +47,9 @@ window.useNumCaptcha().then((res) => {
 	// do something
 });
 ```
+
+---
+
+#### Others numCAPTCHA Libraries...
+
+If you are using awesome _VueJS_, do check out [numCaptchaVUE](https://github.com/Kabbage-Babbage/libraryVUE) :tada:
