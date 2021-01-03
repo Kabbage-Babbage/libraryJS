@@ -20,11 +20,16 @@ async function reloadCaptcha(
 	captcha: CaptchaInstance
 ): Promise<CaptchaInstance> {
 	blur(captcha.image);
-
-	const { image, id } = await getCaptcha();
-	captcha.id = id;
-	updateImage(captcha.image, image);
 	updateStatus(captcha.status, "pending");
+
+	try {
+		const { image, id } = await getCaptcha();
+		captcha.id = id;
+		updateImage(captcha.image, image);
+	} catch (err) {
+		// show alt message when error getting Captcha
+		unblur(captcha.image);
+	}
 
 	unblur(captcha.image);
 	clearInput(captcha.input);

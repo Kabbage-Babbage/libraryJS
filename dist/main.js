@@ -289,10 +289,15 @@ async function submitCaptcha(id, check) {
 const forcedReloadTime = 15000;
 async function reloadCaptcha(captcha) {
     blur(captcha.image);
-    const { image, id } = await getCaptcha();
-    captcha.id = id;
-    updateImage(captcha.image, image);
     updateStatus(captcha.status, "pending");
+    try {
+        const { image, id } = await getCaptcha();
+        captcha.id = id;
+        updateImage(captcha.image, image);
+    }
+    catch (err) {
+        unblur(captcha.image);
+    }
     unblur(captcha.image);
     clearInput(captcha.input);
     enable(captcha.input);

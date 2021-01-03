@@ -33,7 +33,7 @@ In your index.html, numCaptcha dynamically renders in a `<div>` tag with the id 
 You also need to import the minified script using a script tag
 
 ```html
-<script src="https://numcaptcha.s3.amazonaws.com/lib/numCaptchaJS/numCaptcha.min.js"></script>
+<script src="https://numcaptcha.s3.amazonaws.com/lib/numCaptchaJS/numCaptcha-js.min.js"></script>
 ```
 
 > :warning: Remember to import numCaptchaJS <u>after</u> the \<body\> tag

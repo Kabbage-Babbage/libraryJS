@@ -7,7 +7,7 @@
 		"types": "tsc",
 		"build": "npx rollup --config",
 		"watch": "npx rollup --config --watch",
-		"minify": "minify ./dist/main.js --out-file ./min/numcaptcha.min.js --mangle.keepClassName"
+		"minify": "minify ./dist/main.js --out-file ./min/numcaptcha-js.min.js --mangle.keepClassName"
 	},
 	"repository": {
 		"type": "git",
