@@ -1,31 +1,31 @@
-import { ImageRequest, Image, AuthRequest, Params } from "../types/fetchTypes";
+import { ImageRequest, Image, Params } from "../types/fetchTypes";
 
-const apiEndpoint = "http://localhost:3000";
+const apiEndpoint = "http://ec2-100-26-246-133.compute-1.amazonaws.com:5000";
 
 export async function getCaptcha(): Promise<Image> {
-	const response = await fetch("http://localhost:3000");
+	const response = await fetch(`${apiEndpoint}/retrieve-image`);
 
 	if (!response.ok) {
 		throw new Error("something went wrong..");
 	}
 
-	// type assertion to ImageRequest
-	const { id, image } = <ImageRequest>await response.json();
+	// type assertion to Image
+	const { id, imageString } = <ImageRequest>await response.json();
 
 	return {
-		id,
-		image: `data:image/png;base64,${image}`,
+		id: id.S,
+		image: `data:image/png;base64,${imageString.S.slice(2, -1)}`,
 	};
 }
 
 export async function submitCaptcha(
 	id: string,
 	check: string
-): Promise<AuthRequest> {
-	const url = new URL(`${apiEndpoint}/images`);
+): Promise<string> {
+	const url = new URL(`${apiEndpoint}/check-answer`);
 	const params: Params = {
 		id,
-		check,
+		answer: check,
 	};
 
 	Object.keys(params).forEach((key: string) =>
@@ -40,5 +40,5 @@ export async function submitCaptcha(
 		throw new Error(response.status.toString());
 	}
 
-	return await response.json();
+	return await response.statusText;
 }

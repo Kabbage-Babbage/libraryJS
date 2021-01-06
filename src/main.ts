@@ -87,12 +87,12 @@ function useNumCaptcha(): Promise<boolean> {
 				clearTimeout(instance.displayTimeoutInstance);
 
 				submitCaptcha(instance.id, check).then(
-					(response) => {
+					() => {
 						endCaptcha(instance, "success");
 						resolve(true);
 						return;
 					},
-					(error) => {
+					() => {
 						errorCount++;
 
 						if (errorCount >= errorThreshold) {
