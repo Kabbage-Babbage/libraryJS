@@ -12,3 +12,7 @@ export interface ImageRequest extends Image {
 export interface AuthRequest {
 	status: Status;
 }
+
+export type Params = {
+	[key: string]: string;
+};

@@ -62,7 +62,10 @@ function restartIntervalInstance(captcha: CaptchaInstance): CaptchaInstance {
 }
 
 function endCaptcha(captcha: CaptchaInstance, status: Status): void {
-	clearInterval(captcha.intervalInstance);
+	if (captcha.intervalInstance) {
+		clearInterval(captcha.intervalInstance);
+	}
+
 	updateStatus(captcha.status, status);
 	hide(captcha.reload.children[0]);
 }

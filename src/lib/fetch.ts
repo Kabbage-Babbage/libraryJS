@@ -1,4 +1,6 @@
-import { ImageRequest, Image, AuthRequest } from "../types/fetchTypes";
+import { ImageRequest, Image, AuthRequest, Params } from "../types/fetchTypes";
+
+const apiEndpoint = "http://localhost:3000";
 
 export async function getCaptcha(): Promise<Image> {
 	const response = await fetch("http://localhost:3000");
@@ -20,13 +22,18 @@ export async function submitCaptcha(
 	id: string,
 	check: string
 ): Promise<AuthRequest> {
-	const response = await fetch("http://localhost:3000/images", {
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-		},
+	const url = new URL(`${apiEndpoint}/images`);
+	const params: Params = {
+		id,
+		check,
+	};
+
+	Object.keys(params).forEach((key: string) =>
+		url.searchParams.append(key, params[key])
+	);
+
+	const response = await fetch(url.toString(), {
 		method: "POST",
-		body: JSON.stringify({ id, check }),
 	});
 
 	if (!response.ok) {
