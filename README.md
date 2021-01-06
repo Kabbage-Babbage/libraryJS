@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./static/logo.png">
+  <img src="https://numcaptcha.s3.amazonaws.com/static/logo.png">
 </div>
 
 <br />
@@ -9,7 +9,7 @@
 <br />
 
 <div align="center">
-  <img src="./static/numCaptcha-1.png">
+  <img src="https://numcaptcha.s3.amazonaws.com/static/numCaptcha-1.png">
 </div>
 
 ---
