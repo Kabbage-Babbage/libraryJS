@@ -12,11 +12,6 @@ export interface UseableElements {
 	status: HTMLElement;
 }
 
-export interface CaptchaInstance extends UseableElements {
-	id?: string;
-	displayTimeoutInstance?: number;
-}
-
 export type CreatableElements = "div" | "i" | "img" | "input" | "form";
 export type CreatableClasses =
 	| "captcha-image"

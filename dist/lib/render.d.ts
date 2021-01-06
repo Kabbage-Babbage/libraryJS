@@ -1,5 +1,5 @@
-import { CaptchaInstance, Status } from "../types/renderTypes";
-declare function useInitialRender(): CaptchaInstance;
+import { UseableElements, Status } from "../types/renderTypes";
+declare function useInitialRender(): UseableElements;
 declare function hide(element: HTMLElement | Element): void;
 declare function show(element: HTMLElement | Element): void;
 declare function blur(element: HTMLImageElement): void;

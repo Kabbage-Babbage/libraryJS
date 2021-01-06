@@ -11,14 +11,18 @@ import {
 	updateStatus,
 } from "./lib/render";
 import { getCaptcha } from "./lib/fetch";
-import { CaptchaInstance } from "./types/renderTypes";
+import { CaptchaInstance } from "./types/mainTypes";
 import { submitCaptcha } from "./lib/fetch";
+import { Status } from "./types/renderTypes";
 
 const forcedReloadTime: number = 15000;
+const errorThreshold: number = 3;
 
 async function reloadCaptcha(
 	captcha: CaptchaInstance
 ): Promise<CaptchaInstance> {
+	captcha = restartIntervalInstance(captcha);
+
 	blur(captcha.image);
 	updateStatus(captcha.status, "pending");
 
@@ -44,15 +48,31 @@ async function reloadCaptcha(
 	return captcha;
 }
 
+function restartIntervalInstance(captcha: CaptchaInstance): CaptchaInstance {
+	// we need to stop current interval to prevent race condition
+	if (captcha.intervalInstance) {
+		clearInterval(captcha.intervalInstance);
+	}
+
+	captcha.intervalInstance = setInterval(async () => {
+		captcha = await reloadCaptcha(captcha);
+	}, forcedReloadTime);
+
+	return captcha;
+}
+
+function endCaptcha(captcha: CaptchaInstance, status: Status): void {
+	clearInterval(captcha.intervalInstance);
+	updateStatus(captcha.status, status);
+	hide(captcha.reload.children[0]);
+}
+
 function useNumCaptcha(): Promise<boolean> {
 	return new Promise(async (resolve, reject) => {
-		let instance = useInitialRender();
+		let instance: CaptchaInstance = useInitialRender();
+		let errorCount: number = 0;
 
 		instance = await reloadCaptcha(instance);
-
-		const reloadInstance = setInterval(async () => {
-			instance = await reloadCaptcha(instance);
-		}, forcedReloadTime);
 
 		// add required event listeners
 		instance.form.addEventListener("submit", (e) => {
@@ -65,12 +85,19 @@ function useNumCaptcha(): Promise<boolean> {
 
 				submitCaptcha(instance.id, check).then(
 					(response) => {
-						clearInterval(reloadInstance);
-						updateStatus(instance.status, "success");
-						hide(instance.reload.children[0]);
+						endCaptcha(instance, "success");
 						resolve(true);
+						return;
 					},
 					(error) => {
+						errorCount++;
+
+						if (errorCount >= errorThreshold) {
+							endCaptcha(instance, "failed");
+							reject(false);
+							return;
+						}
+
 						updateStatus(instance.status, "failed");
 						show(instance.reload);
 					}

@@ -40,12 +40,17 @@ You also need to import the minified script using a script tag
 
 <br />
 
-After importing the script, you would have access to the `useNumCaptcha()` function in the global `windows` object. The function returns a promise which resolves with the value of `true` when user completes <u>numCAPTCHA</u>.
+After importing the script, you would have access to the `useNumCaptcha()` function in the global `windows` object. The function returns a promise which resolves with the value of `true` when user successfully completes <u>numCAPTCHA</u>, else it would reject with the value of `false` when user is identified as a bot.
 
 ```js
-window.useNumCaptcha().then((res) => {
-	// do something
-});
+window
+	.useNumCaptcha()
+	.then((res) => {
+		// do something onSuccess
+	})
+	.catch((err) => {
+		// do something onFailed
+	});
 ```
 
 ---

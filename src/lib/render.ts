@@ -1,5 +1,5 @@
 import { cssStyles } from "../styles";
-import { UseableElements, CaptchaInstance, Status } from "../types/renderTypes";
+import { UseableElements, Status } from "../types/renderTypes";
 import {
 	linkDependencies,
 	inputType,
@@ -9,7 +9,6 @@ import {
 	removeClass,
 	removeAllClass,
 } from "../utils/renderUtils";
-import { getCaptcha } from "./fetch";
 
 const designatedId: string = "captcha-wrapper";
 
@@ -69,7 +68,7 @@ function useDefaultStructure(wrapper: HTMLElement): UseableElements {
 	};
 }
 
-function useInitialRender(): CaptchaInstance {
+function useInitialRender(): UseableElements {
 	const wrapper: HTMLElement | null = document.getElementById(designatedId);
 
 	if (!wrapper) {

@@ -287,7 +287,9 @@ async function submitCaptcha(id, check) {
 }
 
 const forcedReloadTime = 15000;
+const errorThreshold = 3;
 async function reloadCaptcha(captcha) {
+    captcha = restartIntervalInstance(captcha);
     blur(captcha.image);
     updateStatus(captcha.status, "pending");
     try {
@@ -307,24 +309,41 @@ async function reloadCaptcha(captcha) {
     }, 5000);
     return captcha;
 }
+function restartIntervalInstance(captcha) {
+    if (captcha.intervalInstance) {
+        clearInterval(captcha.intervalInstance);
+    }
+    captcha.intervalInstance = setInterval(async () => {
+        captcha = await reloadCaptcha(captcha);
+    }, forcedReloadTime);
+    return captcha;
+}
+function endCaptcha(captcha, status) {
+    clearInterval(captcha.intervalInstance);
+    updateStatus(captcha.status, status);
+    hide(captcha.reload.children[0]);
+}
 function useNumCaptcha() {
     return new Promise(async (resolve, reject) => {
         let instance = useInitialRender();
+        let errorCount = 0;
         instance = await reloadCaptcha(instance);
-        const reloadInstance = setInterval(async () => {
-            instance = await reloadCaptcha(instance);
-        }, forcedReloadTime);
         instance.form.addEventListener("submit", (e) => {
             const check = instance.input.value;
             if (instance.id && !!check) {
                 disable(instance.input);
                 clearTimeout(instance.displayTimeoutInstance);
                 submitCaptcha(instance.id, check).then((response) => {
-                    clearInterval(reloadInstance);
-                    updateStatus(instance.status, "success");
-                    hide(instance.reload.children[0]);
+                    endCaptcha(instance, "success");
                     resolve(true);
+                    return;
                 }, (error) => {
+                    errorCount++;
+                    if (errorCount >= errorThreshold) {
+                        endCaptcha(instance, "failed");
+                        reject(false);
+                        return;
+                    }
                     updateStatus(instance.status, "failed");
                     show(instance.reload);
                 });
