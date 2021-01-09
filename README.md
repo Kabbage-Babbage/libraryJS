@@ -9,7 +9,7 @@
 <br />
 
 <div align="center">
-  <img src="https://numcaptcha.s3.amazonaws.com/static/numCaptcha-1.png">
+   <img src="https://numcaptcha.s3.amazonaws.com/static/numCaptcha-1.png" width="400px">
 </div>
 
 ---
